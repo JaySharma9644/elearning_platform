@@ -13,6 +13,8 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
     "plugins": [
       {
         "name": "next"
