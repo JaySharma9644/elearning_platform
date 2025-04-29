@@ -2,7 +2,10 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export const customer_registration = createAsyncThunk(
   "auth/register",
-  async (info:{name:string, password: string; email: string }, { rejectWithValue, fulfillWithValue }) => {
+  async (
+    info: { name: string; password: string; email: string },
+    { rejectWithValue, fulfillWithValue }
+  ) => {
     try {
       const response = await fetch("/api/auth/register", {
         method: "POST",
@@ -11,9 +14,16 @@ export const customer_registration = createAsyncThunk(
         },
         body: JSON.stringify(info),
       });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        return rejectWithValue({
+          status: response.status,
+          error: errorData.error || "Register failed",
+        });
+      }
       const data = await response.json();
       localStorage.setItem("customerToken", data.token);
-
       return fulfillWithValue(data);
     } catch (error: unknown) {
       return rejectWithValue(error);
@@ -34,17 +44,26 @@ export const customer_login = createAsyncThunk(
         },
         body: JSON.stringify(info),
       });
+     
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return rejectWithValue({
+          status: response.status,
+          error: errorData.error || "LogIn failed",
+        });
+      }
       const data = await response.json();
       localStorage.setItem("customerToken", data.token);
       return fulfillWithValue(data);
     } catch (error: unknown) {
-      return rejectWithValue(error);``
+      return rejectWithValue(error);
     }
   }
 );
 export const customer_logout = createAsyncThunk(
   "auth/logout",
-  async (_ : {}, { rejectWithValue, fulfillWithValue }) => {  
+  async (_: {}, { rejectWithValue, fulfillWithValue }) => {
     try {
       const response = await fetch("/api/auth/logout", {
         method: "POST",
@@ -53,6 +72,14 @@ export const customer_logout = createAsyncThunk(
         },
         body: JSON.stringify({}),
       });
+     
+      if (!response.ok) {
+        const errorData = await response.json();
+        return rejectWithValue({
+          status: response.status,
+          error: errorData.error || "Logout Failed",
+        });
+      }
       const data = await response.json();
       localStorage.removeItem("customerToken");
       return fulfillWithValue(data);
@@ -60,10 +87,7 @@ export const customer_logout = createAsyncThunk(
       return rejectWithValue(error);
     }
   }
-)
-
-
-
+);
 
 export interface IAuth {
   currentUser: {};
@@ -102,8 +126,10 @@ const authSlice = createSlice({
       })
       .addCase(customer_registration.fulfilled, (state, { payload }) => {
         state.currentUser = "";
-        state.errorMessage = "";
+
         state.successMessage = payload?.message || "Registration successful";
+        state.errorMessage = "";
+
         state.isLoggedIn = true;
         state.loader = false;
       })
@@ -116,8 +142,10 @@ const authSlice = createSlice({
       })
       .addCase(customer_login.fulfilled, (state, { payload }) => {
         state.currentUser = "";
-        state.errorMessage = "";
+
         state.successMessage = payload?.message || "Login successful";
+        state.errorMessage = "";
+
         state.isLoggedIn = true;
         state.loader = false;
       })
@@ -131,8 +159,10 @@ const authSlice = createSlice({
       })
       .addCase(customer_logout.fulfilled, (state, { payload }) => {
         state.currentUser = "";
-        state.errorMessage = "";
+
         state.successMessage = payload?.message || "Logout successful";
+        state.errorMessage = "";
+
         state.isLoggedIn = false;
         state.loader = false;
       });

@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/app/util/db';
-import { comparePassword } from '@/app/util/auth';
 import jwt from 'jsonwebtoken';
-import { headers } from 'next/headers';
+import bcrypt from 'bcryptjs';
 export async function POST(request: Request) {
   try {
     const { email, password } = await request.json();
@@ -29,7 +28,7 @@ export async function POST(request: Request) {
     }
 
     // Compare password
-    const isValidPassword = comparePassword(password, user.password);
+    const isValidPassword = bcrypt.compare(password,  user.password);
 
     if (!isValidPassword) {
       return NextResponse.json(
@@ -46,9 +45,9 @@ export async function POST(request: Request) {
     const response = NextResponse.json({
       message: 'Login successful',
       user: userWithoutPassword,
-      token
+      token,
      
-    });
+    },{ status: 201 });
     response.cookies.set('token', token, {
       httpOnly: true,
       sameSite: 'strict',

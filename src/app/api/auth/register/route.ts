@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/app/util/db';
-import { hashPassword } from '@/app/util/auth';
+
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 export async function POST(request: Request) {
   try {
     const { email, password, name } = await request.json();
@@ -27,7 +28,7 @@ export async function POST(request: Request) {
     }
 
     // Hash password and create user
-    const hashedPassword = await hashPassword(password) as string;
+    const hashedPassword = await bcrypt.hash(password, 10);
     
     const user = await prisma.user.create({
       data: {
