@@ -17,10 +17,9 @@ export const customer_registration = createAsyncThunk(
       
       if (!response.ok) {
         const errorData = await response.json();
-        return rejectWithValue({
-          status: response.status,
-          error: errorData.error || "Register failed",
-        });
+        return rejectWithValue(
+          errorData
+        );
       }
       const data = await response.json();
       localStorage.setItem("customerToken", data.token);
@@ -48,10 +47,9 @@ export const customer_login = createAsyncThunk(
 
       if (!response.ok) {
         const errorData = await response.json();
-        return rejectWithValue({
-          status: response.status,
-          error: errorData.error || "LogIn failed",
-        });
+        return rejectWithValue(
+          errorData
+        );
       }
       const data = await response.json();
       localStorage.setItem("customerToken", data.token);
@@ -75,10 +73,9 @@ export const customer_logout = createAsyncThunk(
      
       if (!response.ok) {
         const errorData = await response.json();
-        return rejectWithValue({
-          status: response.status,
-          error: errorData.error || "Logout Failed",
-        });
+        return rejectWithValue(
+          errorData
+        );
       }
       const data = await response.json();
       localStorage.removeItem("customerToken");
@@ -120,8 +117,8 @@ const authSlice = createSlice({
       .addCase(customer_registration.pending, (state, { payload }) => {
         state.loader = true;
       })
-      .addCase(customer_registration.rejected, (state, { payload }) => {
-        state.errorMessage = "Registration Failed";
+      .addCase(customer_registration.rejected, (state, { error }) => {
+        state.errorMessage =   "Registration Failed";
         state.loader = false;
       })
       .addCase(customer_registration.fulfilled, (state, { payload }) => {
@@ -136,7 +133,7 @@ const authSlice = createSlice({
       .addCase(customer_login.pending, (state, { payload }) => {
         state.loader = true;
       })
-      .addCase(customer_login.rejected, (state, { payload }) => {
+      .addCase(customer_login.rejected, (state, { error }) => {
         state.errorMessage = "Login Failed";
         state.loader = false;
       })
@@ -152,15 +149,15 @@ const authSlice = createSlice({
       .addCase(customer_logout.pending, (state, { payload }) => {
         state.loader = true;
       })
-      .addCase(customer_logout.rejected, (state, { payload }) => {
-        state.errorMessage = "Logout Failed";
+      .addCase(customer_logout.rejected, (state, { error }) => {
+        state.errorMessage =   "Logout Failed";
         state.loader = false;
         state.isLoggedIn = true;
       })
       .addCase(customer_logout.fulfilled, (state, { payload }) => {
         state.currentUser = "";
 
-        state.successMessage = payload?.message || "Logout successful";
+        state.successMessage = "Logout successful";
         state.errorMessage = "";
 
         state.isLoggedIn = false;
