@@ -13,12 +13,14 @@ export const userSchema = z.object({
     ),
   name: z.string().min(2, 'Name must be at least 2 characters').optional(),
   createdAt: z.date().optional(),
+  updatedAt: z.date().optional(),
+  resetCode: z.string().optional()
 });
 
 // Schema for user registration
 export const userRegistrationSchema = userSchema.omit({ 
   id: true, 
-  createdAt: true 
+  createdAt: true,
 });
 
 // Schema for user login

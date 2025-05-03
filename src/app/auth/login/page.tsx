@@ -77,8 +77,14 @@ const Login: React.FC = () => {
           </div>
           <div>
             <p className="text-center text-sm text-gray-500">
-              {" "}
+              
               Not Registered? <Link href="/auth/register">Sign up</Link>
+            </p>
+          </div>
+          <div>
+            <p className="text-center text-sm text-gray-500">
+              
+              <Link href="/auth/forgot_password">Forgot Password</Link>
             </p>
           </div>
         </form>

@@ -122,7 +122,11 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   name: 'name',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  resetCode: 'resetCode',
+  resetCodeExpiresAt: 'resetCodeExpiresAt',
+  role: 'role',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -139,7 +143,11 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-
+exports.Role = exports.$Enums.Role = {
+  ADMIN: 'ADMIN',
+  INSTRUCTOR: 'INSTRUCTOR',
+  STUDENT: 'STUDENT'
+};
 
 exports.Prisma.ModelName = {
   User: 'User'

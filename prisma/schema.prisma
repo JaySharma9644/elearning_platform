@@ -17,6 +17,16 @@ model User {
   password  String
   name      String?
   createdAt DateTime @default(now()) @map("created_at")
+  resetCode String ? @map("reset_code")
+  resetCodeExpiresAt DateTime? @map("reset_code_expires_at")
+  role Role @default(STUDENT) @map("role")
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at")
+
 
   @@map("users")
 } 
+enum Role {
+  ADMIN
+  INSTRUCTOR
+  STUDENT
+}

@@ -8,7 +8,7 @@ import { customer_logout, messageClear } from "@/lib/reducers/authReducer";
 const Header: React.FC = () => {
   const [currentNav, setCurrentNav] = useState<string>("");
 
-  const { currentUser, isLoggedIn, loader} =
+  const { currentUser, loader} =
     useAppSelector((state: any) => state.auth);
 
   const dispatch = useAppDispatch();
@@ -46,7 +46,7 @@ const Header: React.FC = () => {
             >
               Dashboard
             </Link>
-            {!isLoggedIn ? (
+            {(currentUser=='' || !currentUser  || currentUser==null)? (
               <Link
                 href="/auth/login"
                 key="/login"
